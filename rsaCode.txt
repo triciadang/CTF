@@ -1,0 +1,16 @@
+from Crypto.Util.number import inverse, bytes_to_long, long_to_bytes
+from base64 import b64decode
+
+# Using the pub.pem, find e & n. Use Factordb to get the primes p, q
+e = 65537
+p = 106824314365456746562761668584927045312727977773444260463553547734415788806571
+q = 109380489566403719014973591337211389488057388775161611283670009403393352513149
+
+phi = (p-1) * (q-1)
+d = inverse(e, phi)
+
+ct = b64decode('M1Qgcu5TJPojVpLreDXxEPctgYG7ZSXso0bIcPWeHsorU7Z5MDViiLPMTfCkdB0UtbdZeWNNzJ5EEtqk+nZjxQ==')
+pt = (pow(bytes_to_long(ct), d, n))
+
+print(long_to_bytes(pt))
+# b"\x02\n\xfc'!\xea\xf3\xeb\xd9\x7f\x97\xabf6x\xc3\x08\xe17\xaf\xb1\x95\xe4\x7f6X\x14\x81\xe19z\x94\x00dam{4lw4y5_u53_l4r63_r54_k3y5}"

