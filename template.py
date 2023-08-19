@@ -1,3 +1,7 @@
+#gdb commands
+#checksec
+
+
 from pwn import *
 
 context.update(arch='i386', os='linux')
