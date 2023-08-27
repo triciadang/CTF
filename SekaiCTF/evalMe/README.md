@@ -1,8 +1,8 @@
-EvalMe - Forensice - SekaiCTF
-Author: Guesslemonger
+<h1>EvalMe - Forensice - SekaiCTF</h1>
+<h2>Author: Guesslemonger</h2>
 
-Problem: I was trying a beginner CTF challenge and successfully solved it. But it didn't give me the flag. Luckily I have this network capture. Can you investigate?
-It came attached with a capture.pcapng.
+<h3>Problem: I was trying a beginner CTF challenge and successfully solved it. But it didn't give me the flag. Luckily I have this network capture. Can you investigate?</h3>
+<h3>>It came attached with a capture.pcapng.</h3
 
 Connecting to the chals.sekai.team server, it required the user to solve 100 simple math problems under a given time. This was solved using the evalMe.py script. 
 
