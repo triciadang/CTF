@@ -1,8 +1,8 @@
 <h1>EvalMe - Forensice - SekaiCTF</h1>
 <h2>Author: Guesslemonger</h2>
 
-<h3>Problem: I was trying a beginner CTF challenge and successfully solved it. But it didn't give me the flag. Luckily I have this network capture. Can you investigate?</h3>
-<h3>>It came attached with a capture.pcapng.</h3
+<h3>Problem: I was trying a beginner CTF challenge and successfully solved it. But it didn't give me the flag. Luckily I have this network capture. Can you investigate?
+It came attached with a capture.pcapng.</h3?
 
 Connecting to the chals.sekai.team server, it required the user to solve 100 simple math problems under a given time. This was solved using the evalMe.py script. 
 
@@ -53,7 +53,7 @@ This script reads the content of flag.txt, encrypts it using XOR encryption with
 This is where the pcap file comes in. It contains the data sent via that POST command. So, filtering by: ip.dst ==35.196.65.151 && http.request.method == POST, we get 51 packets that contain the bytes that was sent as seen below:
 
 
-![alt text](https://github.com/triciadang/CTF/SekaiCTF/evalMe/evalMeScreenshot.jpg?raw=true)
+![alt text]([https://github.com/triciadang/CTF/SekaiCTF/evalMe/evalMeScreenshot.jpg?raw=true])
 
 Exporting all those bytes, we created a script that reversed the encryption for each byte:
 
