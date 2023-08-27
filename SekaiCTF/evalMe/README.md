@@ -57,7 +57,7 @@ This script reads the content of `flag.txt`, encrypts it using XOR encryption wi
 This is where the pcap file comes in. It contains the data sent via that POST command. So, filtering by: `ip.dst ==35.196.65.151 && http.request.method == POST`, I get 51 packets that contain the bytes that were sent as seen below:
 
 
-[![alt text]([https://github.com/triciadang/CTF/SekaiCTF/evalMe/evalMeScreenshot.jpg?raw=true])](https://github.com/triciadang/CTF/blob/main/SekaiCTF/evalMe/evalMeScreenshot.jpg)
+![Alt text](https://github.com/triciadang/CTF/blob/main/SekaiCTF/evalMe/evalMeScreenshot.jpg)
 
 I exported all of the bytes into a txt file using Wireshark.
 
