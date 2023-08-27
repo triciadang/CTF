@@ -1,5 +1,5 @@
-# EvalMe WriteUp - Forensics - SekaiCTF
-## Problem Author: Guesslemonger
+# WriteUp for EvalMe - Forensics - SekaiCTF
+### CTF Problem Creator: Guesslemonger
 
 ### Problem
 I was trying a beginner CTF challenge and successfully solved it. But it didn't give me the flag. Luckily I have this network capture. Can you investigate? It came attached with a `capture.pcapng`.
