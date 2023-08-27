@@ -1,11 +1,11 @@
 # WriteUp for EvalMe - Forensics - SekaiCTF
 ### CTF Problem Creator: Guesslemonger
 
-### Problem
+### Challenge Description
 I was trying a beginner CTF challenge and successfully solved it. But it didn't give me the flag. Luckily I have this network capture. Can you investigate? It came attached with a `capture.pcapng`.
 
-### Challenge Description
-Connecting to the `chals.sekai.team` server required the user to solve 100 simple math problems under a given time. This was solved using the `evalMe.py` script.
+### Initial Connection Solve
+Connecting to the `chals.sekai.team` server required the user to solve 100 simple math problems within a given time. This was solved using the `evalMe.py` script.
 
 Following its solve, there was a curl command given at the end:
 ```python
